@@ -19,6 +19,7 @@ int create_terminal(unsigned int args, WINDOW *win)
 	unsigned int mask = 0 | args;
 	unsigned long size_masks = sizeof(MASKS) / sizeof(MASK_ASSOC);
 
+	get_log_file();
 	initscr();
 	for (unsigned int i = 0; i < size_masks; i++) {
 		if (mask & MASKS[i].MASK) {

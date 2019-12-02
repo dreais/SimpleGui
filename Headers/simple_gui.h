@@ -6,7 +6,6 @@
 #define SIMPLEGUI_SIMPLE_GUI_H
 
 #include <ncurses.h>
-#include "easylogs.h"
 
 ///		INIT FOLDER
 /**                 **\
@@ -14,11 +13,31 @@
 \**                 **/
 #define INSTANCE_CREATED 0
 
+typedef struct {
+	WINDOW **win;
+	unsigned short win_count;
+	char inter_buffer[512];
+	FILE *stream;
+	int z_index;
+} instance;
+
 /**                 **\
  *  PROTOTYPES    	 *
 \**                 **/
-int create_instance();
 
+/**
+ * create a new instance
+ * @param prev_z_index if any, the z-index of the previous instance
+ * @return a newly created instance
+ */
+instance create_instance(int prev_z_index);
+
+/**
+ * create and initialize terminal using the below masks
+ * @param args a binary mask
+ * @param win ptr to the window to apply modification, if any
+ * @return 0 if successful, otherwise 1
+ */
 int create_terminal(unsigned int args, WINDOW *win);
 
 /**                 **\
@@ -42,5 +61,7 @@ typedef struct {
 #define NOECHO	ECHO << 1		// 1000
 #define KEYPAD	NOECHO << 1		// 10000
 #define NOCBREAK KEYPAD << 1	// 100000
+
+#include "easylogs.h"
 
 #endif //SIMPLEGUI_SIMPLE_GUI_H
