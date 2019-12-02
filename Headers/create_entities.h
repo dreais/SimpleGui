@@ -1,0 +1,8 @@
+//
+// Created by rudreais on 02/12/2019.
+//
+
+#ifndef SIMPLEGUI_CREATE_ENTITIES_H
+#define SIMPLEGUI_CREATE_ENTITIES_H
+
+#endif //SIMPLEGUI_CREATE_ENTITIES_H
