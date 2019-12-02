@@ -9,7 +9,7 @@ add_library(libeasylogs STATIC IMPORTED)
 set_property(TARGET libeasylogs PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/Libraries/libeasylogs.a)
 include_directories(${CMAKE_SOURCE_DIR}/Headers)
 
-set(SOURCES Sources/main.c)
+set(SOURCES Sources/main.c Sources/Init/create_entities.c Headers/create_entities.h)
 
 set(C_FILES ${SOURCES})
 message(STATUS "Creating sources from: ${C_FILES}")
