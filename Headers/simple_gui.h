@@ -5,6 +5,6 @@
 #ifndef SIMPLEGUI_SIMPLE_GUI_H
 #define SIMPLEGUI_SIMPLE_GUI_H
 
-#include "curses.h"
+#include <ncurses.h>
 
 #endif //SIMPLEGUI_SIMPLE_GUI_H
