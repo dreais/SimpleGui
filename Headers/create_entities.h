@@ -13,5 +13,6 @@
 
 void win_push_back(instance *current, WINDOW *to_push);
 
+void destroy_win_arr(instance *to_free);
 
 #endif //SIMPLEGUI_CREATE_ENTITIES_H

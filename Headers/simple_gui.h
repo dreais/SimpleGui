@@ -63,5 +63,6 @@ typedef struct {
 #define NOCBREAK KEYPAD << 1	// 100000
 
 #include "easylogs.h"
+#include "create_entities.h"
 
 #endif //SIMPLEGUI_SIMPLE_GUI_H

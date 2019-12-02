@@ -16,7 +16,6 @@ void win_push_back(instance *current, WINDOW *to_push)
 	}
 	for (unsigned short i = 0; i < current->win_count - 1; i++) {
 		tmp[i] = current->win[i];
-		free(current->win[i]);
 	}
 	tmp[current->win_count] = to_push;
 	free(current->win);
