@@ -7,12 +7,6 @@
 
 #include <ncurses.h>
 
-///		INIT FOLDER
-/**                 **\
- *  RETURN VALUES    *
-\**                 **/
-#define INSTANCE_CREATED 0
-
 typedef struct {
 	int sizx;
 	int sizy;
@@ -30,10 +24,6 @@ typedef struct {
 	prop_t properties;
 } instance;
 
-/**                 **\
- *  PROTOTYPES    	 *
-\**                 **/
-
 /**
  * create a new instance
  * @param prev_z_index if any, the z-index of the previous instance
@@ -49,13 +39,20 @@ instance create_instance(int prev_z_index);
  */
 int create_terminal(unsigned int args);
 
+/**
+ * create and add a new window to an instance
+ * @param current the instance we're adding a window to
+ * @param properties_window the properties of the new window. if none, will automatically generate
+ */
+void inst_add_window(instance *current, prop_t *properties_window);
+
 /**                 **\
  *  MASK    	 	 *
 \**                 **/
 typedef struct {
 	unsigned long MASK;
 	char *NAME;
-	// we need both for functions like keypad()
+	// we need the 3 for functions like keypad() or curs_set()
 	int (*func_int)();
 	int (*func_win)(WINDOW *, bool bf);
 	int (*func_int_int)(int);

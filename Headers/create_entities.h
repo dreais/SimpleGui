@@ -12,7 +12,6 @@
 \**                 **/
 
 void win_push_back(instance *current, WINDOW *to_push);
-void inst_add_window(instance *current, prop_t *properties_window);
 
 void destroy_win_arr(instance *to_free);
 
