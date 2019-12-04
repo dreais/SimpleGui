@@ -1,10 +1,9 @@
-#include <ncurses.h>
-#include "../Headers/simple_gui.h"
+//
+// Created by rudreais on 04/12/2019.
+//
 
-/**
- * this is an example program. please see the whole file and read through the flow to understand
- * how the lib is to be used.
- */
+#include <ncurses.h>
+#include "Headers/simple_gui.h"
 
 int main(void)
 {

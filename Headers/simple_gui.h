@@ -7,23 +7,22 @@
 
 #include <ncurses.h>
 
-///		INIT FOLDER
-/**                 **\
- *  RETURN VALUES    *
-\**                 **/
-#define INSTANCE_CREATED 0
+typedef struct {
+	int sizx;
+	int sizy;
+	int posx;
+	int posy;
+} prop_t;
 
 typedef struct {
 	WINDOW **win;
+	char **name;
 	unsigned short win_count;
 	char inter_buffer[512];
 	FILE *stream;
 	int z_index;
+	prop_t properties;
 } instance;
-
-/**                 **\
- *  PROTOTYPES    	 *
-\**                 **/
 
 /**
  * create a new instance
@@ -38,7 +37,14 @@ instance create_instance(int prev_z_index);
  * @param win ptr to the window to apply modification, if any
  * @return 0 if successful, otherwise 1
  */
-int create_terminal(unsigned int args, WINDOW *win);
+int create_terminal(unsigned int args);
+
+/**
+ * create and add a new window to an instance
+ * @param current the instance we're adding a window to
+ * @param properties_window the properties of the new window. if none, will automatically generate
+ */
+void inst_add_window(instance *current, prop_t *properties_window);
 
 /**                 **\
  *  MASK    	 	 *
@@ -46,21 +52,24 @@ int create_terminal(unsigned int args, WINDOW *win);
 typedef struct {
 	unsigned long MASK;
 	char *NAME;
-	// we need both for functions like keypad()
+	// we need the 3 for functions like keypad() or curs_set()
 	int (*func_int)();
 	int (*func_win)(WINDOW *, bool bf);
+	int (*func_int_int)(int);
 	int func_type;
 } MASK_ASSOC;
 
 #define FUNC_INT 1
 #define FUNC_WIN 2
+#define FUNC_INT_INT 3
 
-#define RAW 	1				// 1
-#define CBREAK	RAW << 1		// 10
-#define ECHO	CBREAK << 1		// 100
-#define NOECHO	ECHO << 1		// 1000
-#define KEYPAD	NOECHO << 1		// 10000
-#define NOCBREAK KEYPAD << 1	// 100000
+#define RAW 	1u				// 1
+#define CBREAK	RAW << 1u		// 10
+#define ECHO	CBREAK << 1u		// 100
+#define NOECHO	ECHO << 1u		// 1000
+#define KEYPAD	NOECHO << 1u		// 10000
+#define NOCBREAK KEYPAD << 1u	// 100000
+#define NOCURSOR NOCBREAK << 1u	// 1000000
 
 #include "easylogs.h"
 #include "create_entities.h"

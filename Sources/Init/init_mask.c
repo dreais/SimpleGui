@@ -11,12 +11,13 @@ static MASK_ASSOC MASKS[] = {
 		{.func_int = &echo, .MASK = ECHO, .NAME = "ECHO", .func_type = FUNC_INT},
 		{.func_int = &noecho, .MASK = NOECHO, .NAME = "NOECHO", .func_type = FUNC_INT},
 		{.func_win = &keypad, .MASK = KEYPAD, .NAME = "KEYPAD", .func_type = FUNC_WIN},
-		{.func_int = &nocbreak, .MASK = NOCBREAK, .NAME="NOCBREAK", .func_type = FUNC_INT}
+		{.func_int = &nocbreak, .MASK = NOCBREAK, .NAME="NOCBREAK", .func_type = FUNC_INT},
+		{.func_int_int = &curs_set, .MASK = NOCURSOR, .NAME="NOCURSOR", .func_type = FUNC_INT_INT}
 };
 
-int create_terminal(unsigned int args, WINDOW *win)
+int create_terminal(unsigned int args)
 {
-	unsigned int mask = 0 | args;
+	unsigned int mask = 0u | args;
 	unsigned long size_masks = sizeof(MASKS) / sizeof(MASK_ASSOC);
 
 	get_log_file();
@@ -27,7 +28,9 @@ int create_terminal(unsigned int args, WINDOW *win)
 			if (MASKS[i].func_type == FUNC_INT) {
 				MASKS[i].func_int();
 			} else if (MASKS[i].func_type == FUNC_WIN) {
-				MASKS[i].func_win(win, true);
+				MASKS[i].func_win(stdscr, true);
+			} else if (MASKS[i].func_type == FUNC_INT_INT) {
+				MASKS[i].func_int_int(0);
 			}
 		}
 	}
