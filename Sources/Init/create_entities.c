@@ -28,7 +28,6 @@ instance create_instance(int prev_z_index)
 		new.win_count = 0;
 		return (instance) {0};
 	}
-	// TODO: set size using the other instances' ones
 	new.win[0] = newwin(0, 0, 0, 0);
 	new.z_index += prev_z_index;
     return new;
