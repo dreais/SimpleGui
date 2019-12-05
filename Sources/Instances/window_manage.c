@@ -10,18 +10,6 @@ static WINDOW *new_win(prop_t *properties)
 	return newwin(properties->sizy, properties->sizx, properties->posy, properties->posx);
 }
 
-static int get_sizx(instance *current, int y)
-{
-	int sizx = 0;
-
-	for (unsigned short i = current->win_count; i > 0; i--) {
-		if (getbegy(current->win[i-1]) == y) {
-			sizx += getmaxx(current->win[i-1]);
-		}
-	}
-	return sizx;
-}
-
 static void resize_window(WINDOW *to_resize, prop_t prop)
 {
 	output_logs_str(PREFIX_WARNING, "Resizing WINDOW, SizX=%d\tSizY=%d\n", prop.sizx, prop.sizy);
@@ -76,46 +64,57 @@ static void hit_windows(instance *current, prop_t *prop)
 	segm_hit_window(current, &coords);
 }
 
+static int get_sizy(instance *current, int x, int *y_ptr)
+{
+	int sizy = 0;
+	bool first_enc = false;
+
+	for (int y = 0; y < LINES; y++) {
+		if (!is_in_any_window(current->win, (pt) {.x = x, .y = y}, current->win_count)) {
+			if (first_enc == false) {
+				first_enc = true;
+				*y_ptr = y - 1;
+			}
+			sizy++;
+		}
+	}
+	return sizy;
+}
+
+static prop_t get_start(instance *current)
+{
+	int sizx = COLS, sizy = 0;
+
+	for (int y, x = 0; x < COLS; x++) {
+		y = 0;
+		sizy = get_sizy(current, x, &y);
+		if (sizy < LINES) {
+			for (unsigned short i = 0; i < current->win_count; i++) {
+				if (getbegy(current->win[i]) == y) {
+					sizx = sizx - getmaxx(current->win[i]);
+					output_logs_str(PREFIX_ERROR, "Test\n");
+				}
+			}
+			output_logs_str(PREFIX_DEBUG, "SizX=%d\n", sizx);
+			output_logs_str(PREFIX_DEBUG, "X=%d\n", x);
+			output_logs_str(PREFIX_DEBUG, "SizY=%d\n", sizy);
+			output_logs_str(PREFIX_DEBUG, "Y=%d\n", y);
+			return (prop_t) {.posx = x, .posy = y, .sizy = sizy, .sizx = sizx};
+		}
+		sizx = COLS;
+	}
+}
+
 void inst_add_window(instance *current, prop_t *properties_window)
 {
 	WINDOW *new = NULL;
-	int sizy = 0;
-	int sizx = 0;
-	int y, x;
 
-	getbegyx(current->win[current->win_count-1], y, x);
-	(void) new;
 	if (non_empty_prop(properties_window)) {
-		hit_windows(current, properties_window);
-		new = new_win(properties_window);
+		new = newwin(0, 0, 0, 0);
 		win_push_back(current, new);
 		return;
 	}
-	for (unsigned short i = current->win_count; i > 0; i--) {
-		if (getbegx(current->win[i-1]) == x) {
-			sizy += getmaxy(current->win[i-1]);
-		}
-	}
-	if (sizy < LINES) {
-		int tmp = sizy;
-		sizx = get_sizx(current, sizy);
-		for (unsigned short i = 0; i < current->win_count; i++) {
-			if (getbegy(current->win[i]) >= sizy) {
-				if (sizx > getbegx(current->win[i]) && sizx < getmaxx(current->win[i]))
-					sizy += getmaxy(current->win[i]);
-			}
-		}
-		*properties_window = (prop_t) {.posy = tmp, .sizy = LINES - sizy, .posx = sizx, .sizx = COLS-sizx};
-	} else {
-		y = 0;
-		sizx = get_sizx(current, y);
-		for (unsigned short i = 0; i < current->win_count; i++) {
-			if (getmaxx(current->win[i]) > sizx) {
-				sizy -= getmaxy(current->win[i]);
-			}
-		}
-		*properties_window = (prop_t) {.posx = sizx, .posy = 0, .sizx = COLS - sizx, .sizy = sizy};
-	}
+	*properties_window = get_start(current);
 	new = new_win(properties_window);
 	win_push_back(current, new);
 }

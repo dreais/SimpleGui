@@ -21,6 +21,7 @@ typedef struct {
 } pos_t;
 
 bool is_in_window(WINDOW *win, pt coord);
+bool is_in_any_window(WINDOW **win, pt coord, unsigned short win_count);
 bool non_empty_prop(prop_t *prop);
 
 #endif //SIMPLEGUI_PROPERTIES_H

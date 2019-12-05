@@ -8,9 +8,19 @@
 
 bool is_in_window(WINDOW *win, pt coord)
 {
-	if ((coord.x >= getbegx(win) && coord.x <= getmaxx(win)) &&
+	if ((coord.x >= getbegx(win) && coord.x <= getbegx(win) + getmaxx(win)) &&
 		 (coord.y >= getbegy(win) && coord.y <= getbegy(win) + getmaxy(win))) {
 		return true;
+	}
+	return false;
+}
+
+bool is_in_any_window(WINDOW **win, pt coord, unsigned short win_count)
+{
+	for (unsigned short i = 0; i < win_count; i++) {
+		if (is_in_window(win[i], coord)) {
+			return true;
+		}
 	}
 	return false;
 }
