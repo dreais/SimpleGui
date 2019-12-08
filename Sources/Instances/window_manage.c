@@ -68,12 +68,21 @@ static void hit_windows(instance *current, prop_t *prop)
 static int get_sizy(instance *current, int x, int y)
 {
 	int sizy = 0;
+	bool first_occ = false;
 
+	output_logs_str(PREFIX_DEBUG, "Entering at %d,%d\n", x, y);
+	output_logs_str(PREFIX_WARNING, "%d\n", is_in_any_window(current->win, (pt) {.x = x, .y = y+17}, current->win_count));
 	for (int y_alt = y; y_alt < LINES; y_alt++) {
 		if (!is_in_any_window(current->win, (pt) {.x = x, .y = y_alt}, current->win_count)) {
+			if (first_occ == false) {
+				first_occ = true;
+			}
 			sizy++;
+		} else if (sizy != 0 && first_occ == true) {
+			return sizy;
 		}
 	}
+	output_logs_str(PREFIX_DEBUG, "Exiting with %d\n", sizy);
 	return sizy;
 }
 
@@ -97,9 +106,7 @@ static prop_t get_start(instance *current)
 	for (int y = 0, x = 0; x < COLS; x++, y = 0) {
 		for (; y < LINES; y++) {
 			if (!is_in_any_window(current->win, (pt) {.x = x, .y = y}, current->win_count)) {
-				output_logs_str(PREFIX_WARNING, "Entering function\n");
 				output_logs_str(PREFIX_DEBUG, "X=%d\tSIZX=%d\n", x, get_sizx(current, x, y));
-				output_logs_str(PREFIX_DEBUG, "Y=%d\tSIZY=%d\n", y, get_sizy(current, x, y));
 				new = (prop_t) {.posx = x, .posy = y, .sizx = get_sizx(current, x, y), .sizy = get_sizy(current, x, y)};
 				if (x > 0) {
 					new.sizx++;
@@ -108,8 +115,8 @@ static prop_t get_start(instance *current)
 				if (y > 0) {
 					new.posy--;
 					new.sizy = get_sizy(current, x, new.posy) + 1;
-					output_logs_str(PREFIX_DEBUG, "Y=%d\tSIZY=%d\n", new.posy, new.sizy);
 				}
+				output_logs_str(PREFIX_DEBUG, "Y=%d\tSIZY=%d\n", new.posy, new.sizy);
 				return new;
 			} else {
 				if (non_empty_prop(&new)) {
