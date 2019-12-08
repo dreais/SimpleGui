@@ -89,10 +89,16 @@ static int get_sizy(instance *current, int x, int y)
 static int get_sizx(instance *current, int x, int y)
 {
 	int sizx = 0;
+	bool first_occ = false;
 
 	for (int x_alt = x; x_alt < COLS; x_alt++) {
 		if (!is_in_any_window(current->win, (pt) {.x = x_alt, .y = y}, current->win_count)) {
+			if (first_occ == false) {
+				first_occ = true;
+			}
 			sizx++;
+		} else if (sizx != 0 && first_occ == true) {
+			return sizx;
 		}
 	}
 	return sizx;
