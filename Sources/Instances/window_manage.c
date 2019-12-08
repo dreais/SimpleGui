@@ -63,18 +63,22 @@ static void hit_windows(instance *current, prop_t *prop)
 	}
 	segm_hit_window(current, &coords);
 }
+static int counter = 0;
 
 static int get_sizy(instance *current, int x, int *y_ptr)
 {
 	int sizy = 0;
 	bool first_enc = false;
 
+	output_logs_str(PREFIX_DEBUG, "WINDOW N°%d IN GET SIZY\n", counter);
+	output_logs_str(PREFIX_DEBUG, "X=%d\n", x);
 	for (int y = 0; y < LINES; y++) {
 		if (!is_in_any_window(current->win, (pt) {.x = x, .y = y}, current->win_count)) {
 			if (first_enc == false) {
 				first_enc = true;
-				*y_ptr = y - 1;
+				*y_ptr = (y < 1) ? 0 : y - 1;
 			}
+			output_logs_str(PREFIX_DEBUG, "SIZY FETCHED %d\n", sizy);
 			sizy++;
 		}
 	}
@@ -85,24 +89,27 @@ static prop_t get_start(instance *current)
 {
 	int sizx = COLS, sizy = 0;
 
+	output_logs_str(PREFIX_DEBUG, "WINDOW N°%d INITIALIZING\n", ++counter);
+	output_logs_str(PREFIX_WARNING, "%d\n", is_in_any_window(current->win, (pt) {.x = 51, .y = 18}, current->win_count));
 	for (int y, x = 0; x < COLS; x++) {
 		y = 0;
-		sizy = get_sizy(current, x, &y);
+		sizy = get_sizy(current, x + (COLS - sizx), &y);
 		if (sizy < LINES) {
 			for (unsigned short i = 0; i < current->win_count; i++) {
 				if (getbegy(current->win[i]) == y) {
 					sizx = sizx - getmaxx(current->win[i]);
-					output_logs_str(PREFIX_ERROR, "Test\n");
 				}
 			}
-			output_logs_str(PREFIX_DEBUG, "SizX=%d\n", sizx);
-			output_logs_str(PREFIX_DEBUG, "X=%d\n", x);
-			output_logs_str(PREFIX_DEBUG, "SizY=%d\n", sizy);
+			sizy = get_sizy(current, (x + 1) + (COLS - sizx), &y);
+			output_logs_str(PREFIX_DEBUG, "X=%d\n", x + (COLS - sizx));
 			output_logs_str(PREFIX_DEBUG, "Y=%d\n", y);
-			return (prop_t) {.posx = x, .posy = y, .sizy = sizy, .sizx = sizx};
+			output_logs_str(PREFIX_DEBUG, "SizX=%d\n", sizx);
+			output_logs_str(PREFIX_DEBUG, "SizY=%d\n", sizy);
+			return (prop_t) {.posx = x + (COLS - sizx), .posy = y, .sizy = sizy, .sizx = sizx};
 		}
 		sizx = COLS;
 	}
+	return (prop_t) {.posx = -1, .posy = -1, .sizx = -1, .sizy = -1};
 }
 
 void inst_add_window(instance *current, prop_t *properties_window)
@@ -110,7 +117,9 @@ void inst_add_window(instance *current, prop_t *properties_window)
 	WINDOW *new = NULL;
 
 	if (non_empty_prop(properties_window)) {
-		new = newwin(0, 0, 0, 0);
+		output_logs_str(PREFIX_DEBUG, "WINDOW N°%d\n", ++counter);
+		hit_windows(current, properties_window);
+		new = new_win(properties_window);
 		win_push_back(current, new);
 		return;
 	}
