@@ -146,6 +146,8 @@ void inst_add_window(instance *current, prop_t *properties_window)
 		return;
 	}
 	*properties_window = get_start(current);
-	new = new_win(properties_window);
-	win_push_back(current, new);
+	if (non_empty_prop(properties_window)) {
+		new = new_win(properties_window);
+		win_push_back(current, new);
+	}
 }
