@@ -7,6 +7,7 @@
 
 #include <ncurses.h>
 
+// TODO: use 2 pt types instead of 4 ints
 typedef struct {
 	int sizx;
 	int sizy;
