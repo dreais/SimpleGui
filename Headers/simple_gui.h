@@ -35,7 +35,6 @@ instance create_instance(int prev_z_index);
 /**
  * create and initialize terminal using the below masks
  * @param args a binary mask
- * @param win ptr to the window to apply modification, if any
  * @return 0 if successful, otherwise 1
  */
 int create_terminal(unsigned int args);
