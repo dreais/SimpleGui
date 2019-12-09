@@ -49,8 +49,10 @@ void inst_add_window(instance *current, prop_t *properties_window);
 /**
  * create a new window by splitting the previous one in half, using a splitting mode defined
  * @param current the instance we're adding a window to
+ * @param g_mode
+ * @param set_global
  */
-void inst_split_win(instance *current);
+void inst_split_win(instance *current, unsigned short g_mode, bool set_global);
 
 typedef struct {
 	unsigned long MASK;
