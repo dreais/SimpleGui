@@ -4,6 +4,7 @@
 
 #include "../Headers/simple_gui.h"
 #include "../Headers/window_manage.h"
+#include "../Headers/properties.h"
 
 static unsigned short mode = SPLIT_MODE_DEFAULT;
 
@@ -28,18 +29,59 @@ static void split_half(instance *current, unsigned short g_mode)
 
 static unsigned short fetch_n(instance *current)
 {
-	unsigned short n = 0;
+	unsigned short n = 1;
+	prop_t def = {-1, -1, -1, -1};
+	int sizx, sizy;
 
 	for (unsigned short i = current->win_count; i > 0; i--) {
-
+		if (!non_empty_prop(&def)) {
+			def = (prop_t) {.sizx = getmaxx(current->win[i-1]),
+					.sizy = getmaxy(current->win[i-1])};
+		} else {
+			sizx = getmaxx(current->win[i - 1]);
+			sizy = getmaxy(current->win[i - 1]);
+			if ((sizx == def.sizx || sizx == def.sizx - 1) &&
+				(sizy == def.sizy || sizy == def.sizy - 1)) {
+				n++;
+			}
+		}
 	}
 	return n;
+}
+
+static void split_n_window(instance *current, unsigned short n, unsigned short offset)
+{
+	WINDOW *to_add;
+	prop_t new;
+	float cols = COLS * (1.0/(n+1.0));
+	float lines = LINES * (1.0/(n+1.0));
+
+	new.posx = (mode != SPLIT_MODE_HORI) ? offset : getbegx(current->win[current->win_count - n]);
+	new.posy = (mode == SPLIT_MODE_HORI) ? offset : getbegy(current->win[current->win_count - n]);
+	new.sizx = (mode != SPLIT_MODE_HORI) ? (int) cols : getmaxx(current->win[current->win_count - n]);
+	new.sizy = (mode == SPLIT_MODE_HORI) ? (int) lines : getmaxy(current->win[current->win_count - n]);
+	for (unsigned short i = current->win_count - n; i < current->win_count; i++) {
+		if (mode == SPLIT_MODE_VERT) {
+		} else {
+			new.posy = offset + (getmaxy(current->win[current->win_count - n])) * i;
+			resize_window(current->win[i], new);
+		}
+	}
+	if (mode == SPLIT_MODE_VERT) {
+
+	} else if (SPLIT_MODE_HORI) {
+		new.posy = offset + (getmaxy(current->win[current->win_count - n])) * n;
+		new.sizy = (int) lines + (LINES % (n + 1));
+	}
+	to_add = new_win(&new);
+	win_push_back(current, to_add);
 }
 
 void inst_split_win(instance *current, unsigned short g_mode, bool set_global)
 {
 	WINDOW *new, *prev = current->win[current->win_count-2];
 	prop_t prop = {-1, -1, -1, -1};
+	unsigned short offset, n;
 
 	if (g_mode != mode && set_global == true) {
 		output_logs_str(PREFIX_WARNING, "Switching to %s mode\n", (g_mode == SPLIT_MODE_VERT) ? "VERT" : "HORZ");
@@ -50,9 +92,11 @@ void inst_split_win(instance *current, unsigned short g_mode, bool set_global)
 		split_half(current, g_mode);
 		return;
 	}
+	n = fetch_n(current);
+	output_logs_str(PREFIX_DEBUG, "N FETCHED=%d\n", n);
 	if (mode == SPLIT_MODE_VERT) {
-		output_logs_str(PREFIX_DEBUG, "N FETCHED=%d\n", fetch_n(current));
 	} else if (mode == SPLIT_MODE_HORI) {
-		output_logs_str(PREFIX_DEBUG, "N FETCHED=%d\n", fetch_n(current));
+		offset = getbegy(current->win[current->win_count - n]);
+		split_n_window(current, n, offset);
 	}
 }

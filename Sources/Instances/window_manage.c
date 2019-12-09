@@ -5,9 +5,11 @@
 #include "properties.h"
 #include <simple_gui.h>
 
-static void resize_window(WINDOW *to_resize, prop_t prop)
+void resize_window(WINDOW *to_resize, prop_t prop)
 {
 	output_logs_str(PREFIX_WARNING, "Resizing WINDOW, SizX=%d\tSizY=%d\n", prop.sizx, prop.sizy);
+	output_logs_str(PREFIX_WARNING, "Moving WINDOW, PosX=%d\tPosY=%d\n", prop.posx, prop.posy);
+	mvwin(to_resize, prop.posy, prop.posx);
 	wresize(to_resize, prop.sizy, prop.sizx);
 	box(to_resize, 0, 0);
 	wrefresh(to_resize);

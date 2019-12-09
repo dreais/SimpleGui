@@ -7,7 +7,8 @@
 
 #include "simple_gui.h"
 
-static WINDOW *new_win(prop_t *properties);
+void resize_window(WINDOW *to_resize, prop_t prop);
+WINDOW *new_win(prop_t *properties);
 void hit_windows(instance *current, prop_t *prop);
 prop_t get_start(instance *current);
 
