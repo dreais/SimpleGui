@@ -69,7 +69,7 @@ static int get_sizx(instance *current, int x, int y)
 	return sizx;
 }
 
-static WINDOW *new_win(prop_t *properties)
+WINDOW *new_win(prop_t *properties)
 {
 	return newwin(properties->sizy, properties->sizx, properties->posy, properties->posx);
 }
