@@ -46,9 +46,14 @@ int create_terminal(unsigned int args);
  */
 void inst_add_window(instance *current, prop_t *properties_window);
 
-/**                 **\
- *  MASK    	 	 *
-\**                 **/
+/**
+ * create a new window by splitting the previous one in half, using a splitting mode defined
+ * @param current the instance we're adding a window to
+ * @param g_mode
+ * @param set_global
+ */
+void inst_split_win(instance *current, unsigned short g_mode, bool set_global);
+
 typedef struct {
 	unsigned long MASK;
 	char *NAME;
@@ -70,6 +75,9 @@ typedef struct {
 #define KEYPAD	NOECHO << 1u		// 10000
 #define NOCBREAK KEYPAD << 1u	// 100000
 #define NOCURSOR NOCBREAK << 1u	// 1000000
+
+#define INST_ADDED 0		// instance window was added
+#define INST_N_ADDED 1		// instance window was NOT added
 
 #include "easylogs.h"
 #include "create_entities.h"

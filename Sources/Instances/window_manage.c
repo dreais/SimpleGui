@@ -5,15 +5,11 @@
 #include "properties.h"
 #include <simple_gui.h>
 
-static int counter = 1;
-static WINDOW *new_win(prop_t *properties)
-{
-	return newwin(properties->sizy, properties->sizx, properties->posy, properties->posx);
-}
-
-static void resize_window(WINDOW *to_resize, prop_t prop)
+void resize_window(WINDOW *to_resize, prop_t prop)
 {
 	output_logs_str(PREFIX_WARNING, "Resizing WINDOW, SizX=%d\tSizY=%d\n", prop.sizx, prop.sizy);
+	output_logs_str(PREFIX_WARNING, "Moving WINDOW, PosX=%d\tPosY=%d\n", prop.posx, prop.posy);
+	mvwin(to_resize, prop.posy, prop.posx);
 	wresize(to_resize, prop.sizy, prop.sizx);
 	box(to_resize, 0, 0);
 	wrefresh(to_resize);
@@ -34,35 +30,6 @@ static bool segm_hit_window(instance *current, pos_t *pos)
 		}
 	}
 	return false;
-}
-
-static void hit_windows(instance *current, prop_t *prop)
-{
-	pos_t coords = {
-			.top_left = {.x = prop->posx, .y = prop->posy},
-			.top_right = {.x = prop->posx + prop->sizx, .y = prop->posy},
-			.bottom_left = {.x = prop->posx, .y = prop->posy + prop->sizy},
-			.bottom_right = {.x = prop->posx + prop->sizx, .y = prop->posy + prop->sizy}
-	};
-	WINDOW *cur_tmp;
-	prop_t prop_tmp;
-
-	for (unsigned short i = 0; i < current->win_count; i++) {
-		cur_tmp = current->win[i];
-		prop_tmp = (prop_t) {.posx = getbegx(cur_tmp), .posy = getbegy(cur_tmp),
-					   .sizx = getmaxx(cur_tmp), .sizy = getmaxy(cur_tmp)};
-		if (is_in_window(cur_tmp, coords.top_left) || is_in_window(cur_tmp, coords.bottom_left)) {
-			output_logs_str(PREFIX_WARNING, "Top-left or bottom-left point in %d\n", i+1);
-			prop_tmp.sizx = coords.top_left.x - prop_tmp.posx;
-			resize_window(cur_tmp, prop_tmp);
-		} else if (is_in_window(cur_tmp, coords.top_right) || is_in_window(cur_tmp, coords.bottom_right)) {
-			output_logs_str(PREFIX_WARNING, "Top-right or bottom-right point in %d\n", i+1);
-			prop_tmp.posx = (coords.top_right.x - getbegx(cur_tmp)) + prop_tmp.posx;
-			prop_tmp.sizx = prop_tmp.sizx - (coords.top_right.x - getbegx(cur_tmp));
-			resize_window(cur_tmp, prop_tmp);
-		}
-	}
-	segm_hit_window(current, &coords);
 }
 
 static int get_sizy(instance *current, int x, int y)
@@ -104,11 +71,44 @@ static int get_sizx(instance *current, int x, int y)
 	return sizx;
 }
 
-static prop_t get_start(instance *current)
+WINDOW *new_win(prop_t *properties)
+{
+	return newwin(properties->sizy, properties->sizx, properties->posy, properties->posx);
+}
+
+void hit_windows(instance *current, prop_t *prop)
+{
+	pos_t coords = {
+			.top_left = {.x = prop->posx, .y = prop->posy},
+			.top_right = {.x = prop->posx + prop->sizx, .y = prop->posy},
+			.bottom_left = {.x = prop->posx, .y = prop->posy + prop->sizy},
+			.bottom_right = {.x = prop->posx + prop->sizx, .y = prop->posy + prop->sizy}
+	};
+	WINDOW *cur_tmp;
+	prop_t prop_tmp;
+
+	for (unsigned short i = 0; i < current->win_count; i++) {
+		cur_tmp = current->win[i];
+		prop_tmp = (prop_t) {.posx = getbegx(cur_tmp), .posy = getbegy(cur_tmp),
+				.sizx = getmaxx(cur_tmp), .sizy = getmaxy(cur_tmp)};
+		if (is_in_window(cur_tmp, coords.top_left) || is_in_window(cur_tmp, coords.bottom_left)) {
+			output_logs_str(PREFIX_WARNING, "Top-left or bottom-left point in %d\n", i+1);
+			prop_tmp.sizx = coords.top_left.x - prop_tmp.posx;
+			resize_window(cur_tmp, prop_tmp);
+		} else if (is_in_window(cur_tmp, coords.top_right) || is_in_window(cur_tmp, coords.bottom_right)) {
+			output_logs_str(PREFIX_WARNING, "Top-right or bottom-right point in %d\n", i+1);
+			prop_tmp.posx = (coords.top_right.x - getbegx(cur_tmp)) + prop_tmp.posx;
+			prop_tmp.sizx = prop_tmp.sizx - (coords.top_right.x - getbegx(cur_tmp));
+			resize_window(cur_tmp, prop_tmp);
+		}
+	}
+	segm_hit_window(current, &coords);
+}
+
+prop_t get_start(instance *current)
 {
 	prop_t new = {.posx = -1, .posy = -1, .sizx = -1, .sizy = -1};
 
-	output_logs_str(PREFIX_DEBUG, "WINDOW N°%d INITIALIZING\n", ++counter);
 	for (int y = 0, x = 0; x < COLS; x++, y = 0) {
 		for (; y < LINES; y++) {
 			if (!is_in_any_window(current->win, (pt) {.x = x, .y = y}, current->win_count)) {
@@ -132,20 +132,4 @@ static prop_t get_start(instance *current)
 		}
 	}
 	return new;
-}
-
-void inst_add_window(instance *current, prop_t *properties_window)
-{
-	WINDOW *new = NULL;
-
-	if (non_empty_prop(properties_window)) {
-		output_logs_str(PREFIX_DEBUG, "WINDOW N°%d\n", ++counter);
-		hit_windows(current, properties_window);
-		new = new_win(properties_window);
-		win_push_back(current, new);
-		return;
-	}
-	*properties_window = get_start(current);
-	new = new_win(properties_window);
-	win_push_back(current, new);
 }
