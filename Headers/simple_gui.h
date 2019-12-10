@@ -54,6 +54,13 @@ void inst_add_window(instance *current, prop_t *properties_window);
  */
 void inst_split_win(instance *current, unsigned short g_mode, bool set_global);
 
+/**
+ * pop out a window from within the instance
+ * @param current the instance we're removing a window from
+ * @param index
+ */
+void win_pop(instance *current, int index);
+
 typedef struct {
 	unsigned long MASK;
 	char *NAME;
