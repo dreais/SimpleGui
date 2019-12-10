@@ -14,11 +14,11 @@ static void split_half(instance *current, unsigned short g_mode)
 	prop_t prop;
 
 	if (g_mode == SPLIT_MODE_VERT) {
-		prop = (prop_t) {.sizx = (COLS / 2) + (COLS % 2), .sizy = LINES,
+		prop = (prop_t) {.sizx = (COLS / 2), .sizy = LINES,
 				   .posx = COLS / 2, .posy = 0};
 		wresize(prev, LINES, COLS / 2);
 	} else if (g_mode == SPLIT_MODE_HORI) {
-		prop = (prop_t) {.sizx = COLS, .sizy = (LINES / 2) + (LINES % 2),
+		prop = (prop_t) {.sizx = COLS, .sizy = (LINES / 2),
 				.posx = 0, .posy = LINES/2};
 		wresize(prev, LINES / 2, COLS);
 	}
@@ -62,16 +62,17 @@ static void split_n_window(instance *current, unsigned short n, unsigned short o
 	new.sizy = (mode == SPLIT_MODE_HORI) ? (int) lines : getmaxy(current->win[current->win_count - n]);
 	for (unsigned short i = current->win_count - n; i < current->win_count; i++) {
 		if (mode == SPLIT_MODE_VERT) {
+			new.posx = offset + (getmaxx(current->win[current->win_count - n])) * i;
+			resize_window(current->win[i], new);
 		} else {
 			new.posy = offset + (getmaxy(current->win[current->win_count - n])) * i;
 			resize_window(current->win[i], new);
 		}
 	}
 	if (mode == SPLIT_MODE_VERT) {
-
-	} else if (SPLIT_MODE_HORI) {
+		new.posx = offset + (getmaxx(current->win[current->win_count - n])) * n;
+	} else if (mode == SPLIT_MODE_HORI) {
 		new.posy = offset + (getmaxy(current->win[current->win_count - n])) * n;
-		new.sizy = (int) lines + (LINES % (n + 1));
 	}
 	to_add = new_win(&new);
 	win_push_back(current, to_add);
@@ -95,6 +96,8 @@ void inst_split_win(instance *current, unsigned short g_mode, bool set_global)
 	n = fetch_n(current);
 	output_logs_str(PREFIX_DEBUG, "N FETCHED=%d\n", n);
 	if (mode == SPLIT_MODE_VERT) {
+		offset = getbegx(current->win[current->win_count - n]);
+		split_n_window(current, n, offset);
 	} else if (mode == SPLIT_MODE_HORI) {
 		offset = getbegy(current->win[current->win_count - n]);
 		split_n_window(current, n, offset);
