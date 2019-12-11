@@ -3,6 +3,7 @@
 //
 
 #include "properties.h"
+#include "window_manage.h"
 #include <simple_gui.h>
 
 void resize_window(WINDOW *to_resize, prop_t prop)
@@ -11,8 +12,6 @@ void resize_window(WINDOW *to_resize, prop_t prop)
 	output_logs_str(PREFIX_WARNING, "Moving WINDOW, PosX=%d\tPosY=%d\n", prop.posx, prop.posy);
 	mvwin(to_resize, prop.posy, prop.posx);
 	wresize(to_resize, prop.sizy, prop.sizx);
-	box(to_resize, 0, 0);
-	wrefresh(to_resize);
 }
 
 static bool segm_hit_window(instance *current, pos_t *pos)
@@ -132,4 +131,49 @@ prop_t get_start(instance *current)
 		}
 	}
 	return new;
+}
+
+unsigned short fetch_n(instance *current)
+{
+	unsigned short n = 1;
+	prop_t def = {-1, -1, -1, -1};
+	int sizx, sizy;
+
+	for (unsigned short i = current->win_count; i > 0; i--) {
+		if (!non_empty_prop(&def)) {
+			def = (prop_t) {.sizx = getmaxx(current->win[i-1]),
+					.sizy = getmaxy(current->win[i-1])};
+		} else {
+			sizx = getmaxx(current->win[i - 1]);
+			sizy = getmaxy(current->win[i - 1]);
+			if ((sizx == def.sizx || sizx == def.sizx - 1) &&
+				(sizy == def.sizy || sizy == def.sizy - 1)) {
+				n++;
+			}
+		}
+	}
+	return n;
+}
+
+unsigned short fetch_n_before(instance *current, int index)
+{
+	int mode = FETCH_MODE(current->win[index], current->win[index-1]);
+	unsigned short i = index - 1, n = 0;
+
+	output_logs_str(PREFIX_DEBUG, "Mode is %s\n", (mode == SPLIT_MODE_VERT) ? "VERT" : "HORI");
+	while (i > 0) {
+		output_logs_str(PREFIX_DEBUG, "%d\n", i);
+		if (FETCH_MODE(current->win[i], current->win[index]) == mode) {
+			n++;
+		} else {
+			return n;
+		}
+		i--;
+	}
+	return n;
+}
+
+unsigned short fetch_n_after(instance *current, int index)
+{
+	return (current->win_count - 1) - index;
 }
