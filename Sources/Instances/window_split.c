@@ -27,28 +27,6 @@ static void split_half(instance *current, unsigned short g_mode, int index)
 	win_push_back(current, new);
 }
 
-static unsigned short fetch_n(instance *current)
-{
-	unsigned short n = 1;
-	prop_t def = {-1, -1, -1, -1};
-	int sizx, sizy;
-
-	for (unsigned short i = current->win_count; i > 0; i--) {
-		if (!non_empty_prop(&def)) {
-			def = (prop_t) {.sizx = getmaxx(current->win[i-1]),
-					.sizy = getmaxy(current->win[i-1])};
-		} else {
-			sizx = getmaxx(current->win[i - 1]);
-			sizy = getmaxy(current->win[i - 1]);
-			if ((sizx == def.sizx || sizx == def.sizx - 1) &&
-				(sizy == def.sizy || sizy == def.sizy - 1)) {
-				n++;
-			}
-		}
-	}
-	return n;
-}
-
 static void split_n_window(instance *current, unsigned short n, unsigned short offset)
 {
 	WINDOW *to_add;

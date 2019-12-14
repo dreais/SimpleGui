@@ -6,6 +6,7 @@
 #define SIMPLEGUI_SIMPLE_GUI_H
 
 #include <ncurses.h>
+#include "Modules/buffer.h"
 
 // TODO: use 2 pt types instead of 4 ints
 typedef struct {
@@ -18,8 +19,8 @@ typedef struct {
 typedef struct {
 	WINDOW **win;
 	char **name;
+	t_buff **buffer; // contains char **word_arr
 	unsigned short win_count;
-	char inter_buffer[512];
 	FILE *stream;
 	int z_index;
 	prop_t properties;
@@ -53,6 +54,13 @@ void inst_add_window(instance *current, prop_t *properties_window);
  * @param set_global
  */
 void inst_split_win(instance *current, unsigned short g_mode, bool set_global);
+
+/**
+ * pop out a window from within the instance
+ * @param current the instance we're removing a window from
+ * @param index
+ */
+void win_pop(instance *current, int index);
 
 typedef struct {
 	unsigned long MASK;
