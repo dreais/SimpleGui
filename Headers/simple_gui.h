@@ -6,6 +6,7 @@
 #define SIMPLEGUI_SIMPLE_GUI_H
 
 #include <ncurses.h>
+#include "Modules/buffer.h"
 
 // TODO: use 2 pt types instead of 4 ints
 typedef struct {
@@ -18,8 +19,9 @@ typedef struct {
 typedef struct {
 	WINDOW **win;
 	char **name;
+	t_buff **buffer; // contains char **word_arr
 	unsigned short win_count;
-	char inter_buffer[512];
+	char **inter_buffer;
 	FILE *stream;
 	int z_index;
 	prop_t properties;
