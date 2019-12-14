@@ -21,7 +21,6 @@ typedef struct {
 	char **name;
 	t_buff **buffer; // contains char **word_arr
 	unsigned short win_count;
-	char **inter_buffer;
 	FILE *stream;
 	int z_index;
 	prop_t properties;
