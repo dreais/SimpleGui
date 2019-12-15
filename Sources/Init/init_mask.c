@@ -3,7 +3,12 @@
 //
 
 #include <ncurses.h>
+#include <sys/types.h>
+#include <pthread.h>
 #include "../Headers/simple_gui.h"
+#include "../Headers/Modules/mouse.h"
+
+pthread_t callThd[NUMTHRDS];
 
 static MASK_ASSOC MASKS[] = {
 		{.func_int = &raw, .MASK = RAW, .NAME = "RAW", .func_type = FUNC_INT},
@@ -14,6 +19,12 @@ static MASK_ASSOC MASKS[] = {
 		{.func_int = &nocbreak, .MASK = NOCBREAK, .NAME="NOCBREAK", .func_type = FUNC_INT},
 		{.func_int_int = &curs_set, .MASK = NOCURSOR, .NAME="NOCURSOR", .func_type = FUNC_INT_INT}
 };
+
+void open_thread(void)
+{
+	mousemask(BUTTON1_CLICKED, NULL);
+	pthread_create(&callThd[0], NULL, mouse_events, NULL);
+}
 
 int create_terminal(unsigned int args)
 {
@@ -34,5 +45,6 @@ int create_terminal(unsigned int args)
 			}
 		}
 	}
+	open_thread();
 	return 0;
 }

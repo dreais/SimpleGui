@@ -5,6 +5,10 @@
 #ifndef SIMPLEGUI_BUFFER_H
 #define SIMPLEGUI_BUFFER_H
 
+/** in the future:
+ * DEPENDENCIES:
+ * scroll, input, mouse (optional)
+ */
 
 /**
  * char **word_arr 	=> array containing words

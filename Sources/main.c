@@ -1,8 +1,9 @@
 #include <ncurses.h>
-#include <stdlib.h>
+#include <pthread.h>
 #include "../Headers/simple_gui.h"
 #include "../Headers/properties.h"
 #include "../Headers/window_manage.h"
+#include "../Headers/Modules/mouse.h"
 
 /**
  * this is an example program. please see the whole file and read through the flow to understand
@@ -25,10 +26,14 @@ void print_stat(WINDOW *cur, int index)
 
 void print_windows(instance *current)
 {
+	int ch;
+
 	for (unsigned short i = 0; i < current->win_count; i++) {
 		box(current->win[i], 0, 0);
 		print_stat(current->win[i], i);
-		wgetch(current->win[i]);
+		wrefresh(current->win[i]);
+		ch = getch();
+		check_click(current);
 	}
 }
 
@@ -57,8 +62,7 @@ int main(void)
 
 	inst_split_win(&inst_tmp, SPLIT_MODE_VERT, true);
 
-	print_windows(&inst_tmp);
-
+	output_logs_str(PREFIX_DEBUG, "Initializing over\n");
 	// TODO inst_split_insert()
 	clear();
 	refresh();
@@ -67,5 +71,6 @@ int main(void)
 
 	destroy_win_arr(&inst_tmp);
 	endwin();
+	cancel_poll();
 	return 0;
 }
