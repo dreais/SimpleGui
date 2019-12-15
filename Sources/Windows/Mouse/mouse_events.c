@@ -33,25 +33,38 @@ void cancel_poll(void)
 	quit = true;
 }
 
+void check_click(instance *current)
+{
+	if (coord_found.x > -1 && coord_found.y > -1) {
+		pthread_mutex_lock(&mutexcoord);
+		output_logs_str(PREFIX_DEBUG, "Found at %d\n", 1+find_window(current, coord_found));
+		coord_found = (pt) {.x = -1, .y = -1};
+		pthread_mutex_unlock(&mutexcoord);
+	}
+}
+
 void *mouse_events(void *n)
 {
 	MEVENT event;
 	struct pollfd fds = {.fd = STDIN_FILENO, .events = POLLIN};
 	int ret_value = 0;
 
+	(void) n;
 	pthread_mutex_init(&mutexcoord, NULL);
 	while (quit == false) {
 		ret_value = poll(&fds, 1, 100);
 		if (ret_value > 0) {
 			if (getmouse(&event) == OK) {
 				if (event.bstate & BUTTON1_PRESSED) {
-					pthread_mutex_lock(&mutexcoord);
-					coord_found = (pt) {.x = event.x, .y = event.y};
-					pthread_mutex_unlock(&mutexcoord);
+					if (!pthread_mutex_lock(&mutexcoord)) {
+						coord_found = (pt) {.x = event.x, .y = event.y};
+						pthread_mutex_unlock(&mutexcoord);
+					}
 					continue;
 				}
 			}
 		}
 	}
 	pthread_mutex_destroy(&mutexcoord);
+	return NULL;
 }

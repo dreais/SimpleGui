@@ -15,6 +15,7 @@ extern pthread_mutex_t mutexcoord;
 
 short find_window(instance *current, pt coord);
 void cancel_poll(void);
+void check_click(instance *current);
 void *mouse_events(void *);
 
 #endif //SIMPLEGUI_MOUSE_H
