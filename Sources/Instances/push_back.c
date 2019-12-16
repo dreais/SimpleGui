@@ -10,6 +10,7 @@ void win_push_back(instance *current, WINDOW *to_push)
 {
 	WINDOW **tmp;
 	t_buff **tmp_buf;
+	t_buff *new_buff =
 
 	tmp = malloc(sizeof(WINDOW *) * ++current->win_count);
 	tmp_buf = malloc(sizeof(t_buff *) * current->win_count);
@@ -25,7 +26,7 @@ void win_push_back(instance *current, WINDOW *to_push)
 		tmp_buf[i] = current->buffer[i];
 	}
 	tmp[current->win_count - 1] = to_push;
-	tmp_buf[current->win_count - 1] = NULL;
+	tmp_buf[current->win_count - 1] = create_empty_buffer();
 	free(current->win);
 	free(current->buffer);
 	current->win = tmp;
