@@ -27,6 +27,7 @@ void win_push_back(instance *current, WINDOW *to_push)
 	tmp[current->win_count - 1] = to_push;
 	tmp_buf[current->win_count - 1] = NULL;
 	free(current->win);
+	free(current->buffer);
 	current->win = tmp;
 	current->buffer = tmp_buf;
 	output_logs_str(PREFIX_DEBUG, "Pushed back 1 WINDOW successfully.\n");
