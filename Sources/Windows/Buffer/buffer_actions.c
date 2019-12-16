@@ -6,8 +6,6 @@
 #include <malloc.h>
 #include "../../../Headers/simple_gui.h"
 
-static short active_window = -1;
-
 static short get_words(const char *str)
 {
 	short count = 0;
@@ -31,7 +29,6 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 		cur->word_arr = arr;
 		return;
 	}
-	// current->buffer[index]->c_word += words;
 	new = malloc(sizeof(char *) * (words + cur->c_word));
 	for (short i = 0; i < (words + cur->c_word); i++) {
 		if (i < cur->c_word)
@@ -41,7 +38,6 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 	}
 	cur->word_arr = new;
 	cur->c_word += words;
-	output_logs_str(PREFIX_WARNING, "%s\n", cur->word_arr[7]);
 }
 
 void wb_write(instance *current, const char *str, int index)
