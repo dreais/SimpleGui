@@ -23,6 +23,7 @@ void win_pop(instance *current, int index)
 		n = fetch_n_before(current, index) + fetch_n_after(current, index);
 		delwin(current->win[index]);
 		current->win_count--;
+		(void) n;
 		if (FETCH_MODE(prev, next) == SPLIT_MODE_HORI) {
 
 		} else if (FETCH_MODE(prev, next) == SPLIT_MODE_VERT) {

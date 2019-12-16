@@ -6,25 +6,8 @@
 #define SIMPLEGUI_SIMPLE_GUI_H
 
 #include <ncurses.h>
+#include "instance.h"
 #include "Modules/buffer.h"
-
-// TODO: use 2 pt types instead of 4 ints
-typedef struct {
-	int sizx;
-	int sizy;
-	int posx;
-	int posy;
-} prop_t;
-
-typedef struct {
-	WINDOW **win;
-	char **name;
-	t_buff **buffer; // contains char **word_arr
-	unsigned short win_count;
-	FILE *stream;
-	int z_index;
-	prop_t properties;
-} instance;
 
 /**
  * create a new instance

@@ -33,16 +33,6 @@ void cancel_poll(void)
 	quit = true;
 }
 
-void check_click(instance *current)
-{
-	if (coord_found.x > -1 && coord_found.y > -1) {
-		pthread_mutex_lock(&mutexcoord);
-		output_logs_str(PREFIX_DEBUG, "Found at %d\n", 1+find_window(current, coord_found));
-		coord_found = (pt) {.x = -1, .y = -1};
-		pthread_mutex_unlock(&mutexcoord);
-	}
-}
-
 void *mouse_events(void *n)
 {
 	MEVENT event;
@@ -67,4 +57,19 @@ void *mouse_events(void *n)
 	}
 	pthread_mutex_destroy(&mutexcoord);
 	return NULL;
+}
+
+///////////////////////////////////////////////////////
+///		EVERYTHING ABOVE IF FROM OTHER THREAD		///
+///////////////////////////////////////////////////////
+
+// TODO: change return value
+void click_coord(instance *current)
+{
+	if (coord_found.x > -1 && coord_found.y > -1) {
+		pthread_mutex_lock(&mutexcoord);
+		output_logs_str(PREFIX_DEBUG, "Found at %d\n", 1+find_window(current, coord_found));
+		coord_found = (pt) {.x = -1, .y = -1};
+		pthread_mutex_unlock(&mutexcoord);
+	}
 }

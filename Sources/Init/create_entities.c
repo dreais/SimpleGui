@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../Headers/simple_gui.h"
+#include "../Headers/instance.h"
 
 void bin(unsigned n)
 {
@@ -30,6 +31,7 @@ instance create_instance(int prev_z_index)
 		return (instance) {0};
 	}
 	new.win[0] = newwin(0, 0, 0, 0);
+	new.buffer[0] = create_empty_buffer();
 	new.z_index += prev_z_index;
     return new;
 }
