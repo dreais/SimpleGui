@@ -5,21 +5,14 @@
 #ifndef SIMPLEGUI_BUFFER_H
 #define SIMPLEGUI_BUFFER_H
 
+#include "../instance.h"
+
 /** in the future:
  * DEPENDENCIES:
  * scroll, input, mouse (optional)
  */
 
-/**
- * char **word_arr 	=> array containing words
- * short c_line 	=> short containing current line, used to scroll
- * short c_word		=> short containing word index, used to apply effects if any
- */
-
-typedef struct {
-	char **word_arr;
-	short c_line;
-	short c_word;
-} t_buff;
+void wb_write(instance *current, const char *str, int index);
+t_buff *create_empty_buffer(void);
 
 #endif //SIMPLEGUI_BUFFER_H
