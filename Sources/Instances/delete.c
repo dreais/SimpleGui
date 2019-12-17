@@ -8,7 +8,6 @@
 static void free_buffer(t_buff *buff)
 {
 	for (short i = 0; i < buff->c_word; i++) {
-		free(buff->properties[i]);
 		free(buff->word_arr[i]);
 	}
 	free(buff->properties);

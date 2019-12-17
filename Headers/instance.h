@@ -22,7 +22,7 @@ typedef struct {
 
 typedef struct {
 	char **word_arr;
-	int **properties;
+	int *properties;
 	short c_line;
 	short c_word;
 } t_buff;
