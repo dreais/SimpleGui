@@ -14,6 +14,7 @@ static bool quit = false;
 
 pt coord_found = {-1, -1};
 pthread_mutex_t mutexcoord = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cnd = PTHREAD_COND_INITIALIZER;
 
 short find_window(instance *current, pt coord)
 {
@@ -44,13 +45,16 @@ void *mouse_events(void *n)
 	while (quit == false) {
 		ret_value = poll(&fds, 1, 100);
 		if (ret_value > 0) {
-			if (getmouse(&event) == OK) {
-				if (event.bstate & BUTTON1_PRESSED) {
-					if (!pthread_mutex_lock(&mutexcoord)) {
+			if (fds.revents & POLLIN) {
+				if (getmouse(&event) == OK) {
+					if (event.bstate & BUTTON1_PRESSED) {
+						output_logs_str(PREFIX_WARNING, "Clicked\n");
+						pthread_mutex_lock(&mutexcoord);
 						coord_found = (pt) {.x = event.x, .y = event.y};
+						pthread_cond_signal(&cnd);
 						pthread_mutex_unlock(&mutexcoord);
+						continue;
 					}
-					continue;
 				}
 			}
 		}
@@ -60,16 +64,13 @@ void *mouse_events(void *n)
 }
 
 ///////////////////////////////////////////////////////
-///		EVERYTHING ABOVE IF FROM OTHER THREAD		///
+///		EVERYTHING ABOVE IS FROM OTHER THREAD		///
 ///////////////////////////////////////////////////////
 
 // TODO: change return value
 void click_coord(instance *current)
 {
 	if (coord_found.x > -1 && coord_found.y > -1) {
-		pthread_mutex_lock(&mutexcoord);
 		output_logs_str(PREFIX_DEBUG, "Found at %d\n", 1+find_window(current, coord_found));
-		coord_found = (pt) {.x = -1, .y = -1};
-		pthread_mutex_unlock(&mutexcoord);
 	}
 }
