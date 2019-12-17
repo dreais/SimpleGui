@@ -30,4 +30,5 @@ void win_push_back(instance *current, WINDOW *to_push)
 	free(current->buffer);
 	current->win = tmp;
 	current->buffer = tmp_buf;
+	set_instance(current);
 }

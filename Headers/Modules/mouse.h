@@ -11,7 +11,6 @@
 #define NUMTHRDS 1
 
 extern volatile pt coord_found;
-extern pthread_mutex_t mutexcoord;
 
 short find_window(instance *current, pt coord);
 void cancel_poll(void);
