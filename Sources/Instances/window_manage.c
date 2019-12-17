@@ -4,7 +4,6 @@
 
 #include "properties.h"
 #include "window_manage.h"
-#include <simple_gui.h>
 
 void resize_window(WINDOW *to_resize, prop_t prop)
 {
