@@ -52,6 +52,7 @@ typedef struct {
 void show_win(instance *current);
 
 void w_set_active(pt coord);
+short w_get_active(void);
 void set_instance(instance *current);
 
 #endif //SIMPLEGUI_INSTANCE_H

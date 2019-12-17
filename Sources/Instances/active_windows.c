@@ -31,6 +31,11 @@ void w_set_active(pt coord)
 	output_logs_str(PREFIX_INFO, "New window=%d\n", 1+find_window(coord));
 }
 
+short w_get_active(void)
+{
+	return active_w;
+}
+
 void set_instance(instance *current)
 {
 	if (already_allocated == false) {
