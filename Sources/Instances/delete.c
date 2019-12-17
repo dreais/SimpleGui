@@ -7,16 +7,27 @@
 
 static void free_short_arr(char **arr, short size)
 {
-	(void) size;
+	for (short i = 0; i < size; i++) {
+		free(arr[i]);
+	}
 	free(arr);
+}
+
+static void free_buffer(t_buff *buff)
+{
+	for (short i = 0; i < buff->c_word; i++) {
+		free(buff->properties[i]);
+		free(buff->word_arr[i]);
+	}
+	free(buff->properties);
+	free(buff->word_arr);
 }
 
 void destroy_win_arr(instance *to_free)
 {
 	for (unsigned short i = 0; i < to_free->win_count; i++) {
 		delwin(to_free->win[i]);
-		if (to_free->buffer[i]->c_word > 0)
-			free_short_arr(to_free->buffer[i]->word_arr, to_free->buffer[i]->c_word);
+		free_buffer(to_free->buffer[i]);
 		free(to_free->buffer[i]);
 	}
 	free(to_free->win);
