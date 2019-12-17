@@ -9,6 +9,7 @@
 static void append_inst_buffer(instance *current, char **arr, int index, short words)
 {
 	char **new;
+	int *prop_new;
 	t_buff *cur = current->buffer[index];
 	int count = 0;
 
@@ -16,22 +17,29 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 		cur->word_arr = arr;
 		cur->properties = malloc(sizeof(int *) * words);
 		for (short i = 0; i < words; i++) {
-			cur->properties[i] = malloc(sizeof(int));
+			cur->properties = malloc(sizeof(int) * words);
 			cur->properties[i] = P_INIT;
 		}
 		cur->c_word = words;
 		return;
 	}
 	new = malloc(sizeof(char *) * (words + cur->c_word));
+	prop_new = malloc(sizeof(int) * (words + cur->c_word));
 	for (short i = 0; i < (words + cur->c_word); i++) {
-		if (i < cur->c_word)
+		if (i < cur->c_word) {
 			new[i] = cur->word_arr[i];
-		else {
+			prop_new[i] = cur->properties[i];
+		} else {
 			new[i] = arr[count++];
+			if (is_whitespace(new[i][0]) == IS_WHITESPACE) {
+				prop_new[i] = P_WHITESPACE;
+			} else {
+				prop_new[i] = P_INIT;
+			}
 		}
-		cur->properties[i] = P_INIT;
 	}
 	cur->word_arr = new;
+	cur->properties = prop_new;
 	cur->c_word += words;
 	free(arr);
 }

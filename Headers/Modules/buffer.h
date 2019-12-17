@@ -26,5 +26,6 @@ char **buffer_split_words(const char *str, short *c_word);
 #define IS_NOT_WHITESPACE 2
 
 #define P_INIT 0
+#define P_WHITESPACE 1
 
 #endif //SIMPLEGUI_BUFFER_H
