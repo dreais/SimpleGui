@@ -10,7 +10,6 @@ void win_push_back(instance *current, WINDOW *to_push)
 {
 	WINDOW **tmp;
 	t_buff **tmp_buf;
-	t_buff *new_buff =
 
 	tmp = malloc(sizeof(WINDOW *) * ++current->win_count);
 	tmp_buf = malloc(sizeof(t_buff *) * current->win_count);
@@ -31,5 +30,4 @@ void win_push_back(instance *current, WINDOW *to_push)
 	free(current->buffer);
 	current->win = tmp;
 	current->buffer = tmp_buf;
-	output_logs_str(PREFIX_DEBUG, "Pushed back 1 WINDOW successfully.\n");
 }

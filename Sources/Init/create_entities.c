@@ -21,7 +21,6 @@ instance create_instance(int prev_z_index)
 {
 	instance new = {0};
 
-	output_logs_str(PREFIX_DEBUG, "Previous z-index at %d\n", prev_z_index);
 	new.win_count = 1;
 	new.win = malloc(sizeof(WINDOW *) * new.win_count);
 	new.buffer = malloc(sizeof(t_buff *) * new.win_count);

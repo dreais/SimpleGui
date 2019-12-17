@@ -47,15 +47,13 @@ void wb_write(instance *current, const char *str, int index)
 	char *tmp = strdup(str);
 	char *tok = NULL;
 	int i = 0;
+	short c_word = get_words(str);
+	char **arr = malloc(sizeof(char *) * c_word);
 
 	if (index < 0 || index > (current->win_count-1)) {
 		output_logs_str(PREFIX_ERROR, "Selected WINDOW does not exist.\n");
 		return;
 	}
-	short c_word = get_words(str);
-	char **arr = malloc(sizeof(char *) * c_word);
-	output_logs_str(PREFIX_DEBUG, "Words = %d\n", c_word);
-
 	for (tok = strtok(tmp, delim); tok != NULL;) {
 		arr[i++] = strdup(tok);
 		tok = strtok(NULL, delim);
