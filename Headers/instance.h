@@ -22,13 +22,14 @@ typedef struct {
 
 typedef struct {
 	char **word_arr;
+	int **properties;
 	short c_line;
 	short c_word;
 } t_buff;
 
 typedef struct {
 	WINDOW **win;
-	char **name;
+	char **name; // unused for now
 	t_buff **buffer; // contains char **word_arr
 	unsigned short win_count;
 	FILE *stream;
