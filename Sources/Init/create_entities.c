@@ -4,8 +4,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../Headers/simple_gui.h"
-#include "../Headers/instance.h"
+#include <pthread.h>
+#include <Modules/mouse.h>
+
+pthread_t callThd[NUMTHRDS];
 
 void bin(unsigned n)
 {
@@ -15,6 +17,12 @@ void bin(unsigned n)
 
 	/* step 2 */
 	printf("%d", n % 2);
+}
+
+void open_thread(void)
+{
+	mousemask(BUTTON1_CLICKED, NULL);
+	pthread_create(&callThd[0], NULL, mouse_events, NULL);
 }
 
 instance create_instance(int prev_z_index)
@@ -32,5 +40,7 @@ instance create_instance(int prev_z_index)
 	new.win[0] = newwin(0, 0, 0, 0);
 	new.buffer[0] = create_empty_buffer();
 	new.z_index += prev_z_index;
+	set_instance(&new);
+	open_thread();
     return new;
 }
