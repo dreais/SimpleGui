@@ -8,8 +8,6 @@
 
 void resize_window(WINDOW *to_resize, prop_t prop)
 {
-	output_logs_str(PREFIX_WARNING, "Resizing WINDOW, SizX=%d\tSizY=%d\n", prop.sizx, prop.sizy);
-	output_logs_str(PREFIX_WARNING, "Moving WINDOW, PosX=%d\tPosY=%d\n", prop.posx, prop.posy);
 	mvwin(to_resize, prop.posy, prop.posx);
 	wresize(to_resize, prop.sizy, prop.sizx);
 }
@@ -22,7 +20,6 @@ static bool segm_hit_window(instance *current, pos_t *pos)
 		win = current->win[i];
 		if (getbegy(win) > pos->top_left.y && getbegy(win) + getmaxy(win) < pos->bottom_left.y) {
 			if (getbegx(win) < pos->top_left.x && getbegx(win) + getmaxx(win) > pos->top_left.x) {
-				output_logs_str(PREFIX_WARNING, "Straight hit in %d\n", i + 1);
 				resize_window(win, (prop_t) {.posx = getbegx(win), .posy = getbegy(win),
 								 .sizx = pos->top_left.x - getbegx(win), .sizy = getmaxy(win)});
 			}
@@ -36,8 +33,6 @@ static int get_sizy(instance *current, int x, int y)
 	int sizy = 0;
 	bool first_occ = false;
 
-	output_logs_str(PREFIX_DEBUG, "Entering at %d,%d\n", x, y);
-	output_logs_str(PREFIX_WARNING, "%d\n", is_in_any_window(current->win, (pt) {.x = x, .y = y+17}, current->win_count));
 	for (int y_alt = y; y_alt < LINES; y_alt++) {
 		if (!is_in_any_window(current->win, (pt) {.x = x, .y = y_alt}, current->win_count)) {
 			if (first_occ == false) {
@@ -48,7 +43,6 @@ static int get_sizy(instance *current, int x, int y)
 			return sizy;
 		}
 	}
-	output_logs_str(PREFIX_DEBUG, "Exiting with %d\n", sizy);
 	return sizy;
 }
 
@@ -91,11 +85,9 @@ void hit_windows(instance *current, prop_t *prop)
 		prop_tmp = (prop_t) {.posx = getbegx(cur_tmp), .posy = getbegy(cur_tmp),
 				.sizx = getmaxx(cur_tmp), .sizy = getmaxy(cur_tmp)};
 		if (is_in_window(cur_tmp, coords.top_left) || is_in_window(cur_tmp, coords.bottom_left)) {
-			output_logs_str(PREFIX_WARNING, "Top-left or bottom-left point in %d\n", i+1);
 			prop_tmp.sizx = coords.top_left.x - prop_tmp.posx;
 			resize_window(cur_tmp, prop_tmp);
 		} else if (is_in_window(cur_tmp, coords.top_right) || is_in_window(cur_tmp, coords.bottom_right)) {
-			output_logs_str(PREFIX_WARNING, "Top-right or bottom-right point in %d\n", i+1);
 			prop_tmp.posx = (coords.top_right.x - getbegx(cur_tmp)) + prop_tmp.posx;
 			prop_tmp.sizx = prop_tmp.sizx - (coords.top_right.x - getbegx(cur_tmp));
 			resize_window(cur_tmp, prop_tmp);
@@ -111,7 +103,6 @@ prop_t get_start(instance *current)
 	for (int y = 0, x = 0; x < COLS; x++, y = 0) {
 		for (; y < LINES; y++) {
 			if (!is_in_any_window(current->win, (pt) {.x = x, .y = y}, current->win_count)) {
-				output_logs_str(PREFIX_DEBUG, "X=%d\tSIZX=%d\n", x, get_sizx(current, x, y));
 				new = (prop_t) {.posx = x, .posy = y, .sizx = get_sizx(current, x, y), .sizy = get_sizy(current, x, y)};
 				if (x > 0) {
 					new.sizx++;
@@ -121,7 +112,6 @@ prop_t get_start(instance *current)
 					new.posy--;
 					new.sizy = get_sizy(current, x, new.posy) + 1;
 				}
-				output_logs_str(PREFIX_DEBUG, "Y=%d\tSIZY=%d\n", new.posy, new.sizy);
 				return new;
 			} else {
 				if (non_empty_prop(&new)) {
@@ -160,9 +150,7 @@ unsigned short fetch_n_before(instance *current, int index)
 	int mode = FETCH_MODE(current->win[index], current->win[index-1]);
 	unsigned short i = index - 1, n = 0;
 
-	output_logs_str(PREFIX_DEBUG, "Mode is %s\n", (mode == SPLIT_MODE_VERT) ? "VERT" : "HORI");
 	while (i > 0) {
-		output_logs_str(PREFIX_DEBUG, "%d\n", i);
 		if (FETCH_MODE(current->win[i], current->win[index]) == mode) {
 			n++;
 		} else {

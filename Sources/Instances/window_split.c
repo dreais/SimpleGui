@@ -40,7 +40,6 @@ static void split_n_window(instance *current, unsigned short n, unsigned short o
 	new.sizx = (mode != SPLIT_MODE_HORI) ? (int) cols : getmaxx(current->win[current->win_count - n]);
 	new.sizy = (mode == SPLIT_MODE_HORI) ? (int) lines : getmaxy(current->win[current->win_count - n]);
 	for (unsigned short i = current->win_count - n; i < current->win_count; i++) {
-		output_logs_str(PREFIX_ERROR, "-----\tITERATION %d\t-----\n", i+1);
 		if (mode == SPLIT_MODE_VERT) {
 			new.posx = offset + (getmaxx(current->win[current->win_count - n])) * count++;
 			resize_window(current->win[i], new);
@@ -65,12 +64,10 @@ void inst_split_win(instance *current, unsigned short g_mode, bool set_global)
 	n = fetch_n(current);
 	if (g_mode != last_mode) {
 		last_mode = g_mode;
-		output_logs_str(PREFIX_DEBUG, "Splitting mode changed.\n");
 		split_half(current, g_mode, current->win_count - 1);
 		return;
 	}
 	if (g_mode != mode && set_global == true) {
-		output_logs_str(PREFIX_WARNING, "Switching to %s mode\n", (g_mode == SPLIT_MODE_VERT) ? "VERT" : "HORZ");
 		mode = g_mode;
 	}
 	if (current->win_count < 2) {
@@ -78,7 +75,6 @@ void inst_split_win(instance *current, unsigned short g_mode, bool set_global)
 		split_half(current, g_mode, 0);
 		return;
 	}
-	output_logs_str(PREFIX_DEBUG, "N FETCHED=%d\n", n);
 	if (mode == SPLIT_MODE_VERT) {
 		offset = getbegx(current->win[current->win_count - n]);
 		split_n_window(current, n, offset);

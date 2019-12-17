@@ -6,13 +6,12 @@
 #include <malloc.h>
 #include "../../../Headers/simple_gui.h"
 
-static short get_words(const char *str)
+static short get_words(const char **arr)
 {
 	short count = 0;
 
-	for (unsigned int i = 0; str[i]; i++) {
-		if (str[i] == ' ')
-			count++;
+	for (unsigned int i = 0; arr[i]; i++) {
+		count++;
 	}
 	return ++count;
 }
@@ -24,6 +23,13 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 	int count = 0;
 
 	if (cur->word_arr == NULL) {
+		cur->word_arr = malloc(sizeof(char *) * words);
+		cur->properties = malloc(sizeof(int *) * words);
+		for (short i = 0; i < words; i++) {
+			cur->word_arr[i] = arr[i];
+			cur->properties[i] = malloc(sizeof(int));
+			cur->properties[i] = P_INIT;
+		}
 		cur->c_word = words;
 		cur->word_arr = arr;
 		return;
@@ -33,8 +39,9 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 		if (i < cur->c_word)
 			new[i] = cur->word_arr[i];
 		else {
-			new[i] = arr[count];
+			new[i] = arr[count++];
 		}
+		cur->properties[i] = P_INIT;
 	}
 	cur->word_arr = new;
 	cur->c_word += words;
@@ -43,26 +50,13 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 
 void wb_write(instance *current, const char *str, int index)
 {
-	char *delim = " ";
-	char *tmp = strdup(str);
-	char *tok = NULL;
-	int i = 0;
+	char **arr;
 
 	if (index < 0 || index > (current->win_count-1)) {
 		output_logs_str(PREFIX_ERROR, "Selected WINDOW does not exist.\n");
 		return;
 	}
-	short c_word = get_words(str);
-	char **arr = malloc(sizeof(char *) * c_word);
-	output_logs_str(PREFIX_DEBUG, "Words = %d\n", c_word);
-
-	for (tok = strtok(tmp, delim); tok != NULL;) {
-		arr[i++] = strdup(tok);
-		tok = strtok(NULL, delim);
-	}
-	free(tmp);
-	append_inst_buffer(current, arr, index, c_word);
-	for (short x = 0; x < current->buffer[index]->c_word; x++) {
-		wprintw(current->win[index], "%s", current->buffer[index]->word_arr[x]);
-	}
+	arr = buffer_split_words(str, &current->buffer[index]->c_word);
+	append_inst_buffer(current, arr, index, current->buffer[index]->c_word);
+	buffer_flush(current, index);
 }
