@@ -7,13 +7,6 @@
 
 #include <ncurses.h>
 
-typedef struct {
-	int sizx;
-	int sizy;
-	int posx;
-	int posy;
-} prop_t;
-
 /**
  * char **word_arr 	=> array containing words
  * short c_line 	=> short containing current line, used to scroll
@@ -21,8 +14,27 @@ typedef struct {
  */
 
 typedef struct {
+	int x;
+	int y;
+} pt;
+
+typedef struct {
+	pt top_left;
+	pt top_right;
+	pt bottom_left;
+	pt bottom_right;
+} pos_t;
+
+typedef struct {
+	int sizx;
+	int sizy;
+	int posx;
+	int posy;
+} prop_t;
+
+typedef struct {
 	char **word_arr;
-	int **properties;
+	int *properties;
 	short c_line;
 	short c_word;
 } t_buff;
@@ -36,5 +48,10 @@ typedef struct {
 	int z_index;
 	prop_t properties;
 } instance;
+
+void show_win(instance *current);
+
+void w_set_active(pt coord);
+void set_instance(instance *current);
 
 #endif //SIMPLEGUI_INSTANCE_H

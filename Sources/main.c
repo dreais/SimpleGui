@@ -24,28 +24,13 @@ void print_stat(WINDOW *cur, int index)
 	wprintw(cur, "pos y=%d", getbegy(cur));
 }
 
-void print_windows(instance *current)
-{
-	int ch;
-
-	for (unsigned short i = 0; i < current->win_count; i++) {
-		box(current->win[i], 0, 0);
-		print_stat(current->win[i], i);
-		wrefresh(current->win[i]);
-		ch = getch();
-		check_click(current);
-	}
-}
-
 int main(void)
 {
 	instance inst_tmp;
 
 	create_terminal(RAW|KEYPAD|NOECHO|NOCURSOR);
-	output_logs_str(PREFIX_INFO, "Max Size X=%d\tSize Y=%d\n", getmaxx(stdscr), getmaxy(stdscr));
 	inst_tmp = create_instance(-1);
 
-	//inst_add_window(&inst_tmp, &(prop_t) {.posx = -1});
 	inst_split_win(&inst_tmp, SPLIT_MODE_VERT, true);
 
 	inst_split_win(&inst_tmp, SPLIT_MODE_VERT, true);
@@ -62,15 +47,19 @@ int main(void)
 
 	inst_split_win(&inst_tmp, SPLIT_MODE_VERT, true);
 
-	output_logs_str(PREFIX_DEBUG, "Initializing over\n");
-	// TODO inst_split_insert()
 	clear();
 	refresh();
-	win_pop(&inst_tmp, 3);
-	print_windows(&inst_tmp);
 
+	char *str = "test1 test2 test3\n";
+	//wb_write(&inst_tmp, str, 0);
+	//wb_write(&inst_tmp, str, 0);
+	char *str2 = "nop nah \n, idk je \nouepbreftest test test test il faut plus e fezo ecrire test";
+	wb_write(&inst_tmp, str2, 0);
+
+	show_win(&inst_tmp);
+	getch();
 	destroy_win_arr(&inst_tmp);
-	endwin();
 	cancel_poll();
+	endwin();
 	return 0;
 }
