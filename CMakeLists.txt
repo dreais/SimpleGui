@@ -9,7 +9,7 @@ add_library(libeasylogs STATIC IMPORTED)
 set_property(TARGET libeasylogs PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/Libraries/libeasylogs.a)
 include_directories(${CMAKE_SOURCE_DIR}/Headers)
 
-set(SOURCES Sources/main.c Sources/Init/create_entities.c Headers/create_entities.h Headers/window_manage.h Sources/Init/init_mask.c Sources/Instances/push_back.c Sources/Instances/delete.c Sources/Instances/window_manage.c Sources/Properties/states.c Headers/properties.h Sources/Windows/Dropdown/dropdown_manage.c Sources/Instances/window_split.c Sources/Instances/windows_add.c Sources/Instances/pop_window.c Headers/Modules/dropdown.h Sources/Windows/Buffer/buffer_actions.c Headers/Modules/buffer.h Sources/Windows/Mouse/mouse_events.c Headers/Modules/mouse.h Headers/instance.h Sources/Windows/Buffer/create.c)
+set(SOURCES Sources/main.c Sources/Init/create_entities.c Headers/create_entities.h Headers/window_manage.h Sources/Init/init_mask.c Sources/Instances/push_back.c Sources/Instances/delete.c Sources/Instances/window_manage.c Sources/Properties/states.c Headers/properties.h Sources/Windows/Dropdown/dropdown_manage.c Sources/Instances/window_split.c Sources/Instances/windows_add.c Sources/Instances/pop_window.c Headers/Modules/dropdown.h Sources/Windows/Buffer/buffer_actions.c Headers/Modules/buffer.h Sources/Windows/Mouse/mouse_events.c Headers/Modules/mouse.h Headers/instance.h Sources/Windows/Buffer/create.c Sources/Windows/Buffer/buffer_flush.c)
 
 set(C_FILES ${SOURCES})
 message(STATUS "Creating sources from: ${C_FILES}")
