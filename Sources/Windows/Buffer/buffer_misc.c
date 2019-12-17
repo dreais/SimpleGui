@@ -20,7 +20,7 @@ static char *sub_str(const char *str, unsigned int i, unsigned int length)
 	return new;
 }
 
-static char **func(const char *str, unsigned int mode)
+static char **divide_str(const char *str, unsigned int mode)
 {
 	char **new = NULL;
 	short switch_mode;
@@ -29,7 +29,7 @@ static char **func(const char *str, unsigned int mode)
 
 	switch_mode = is_whitespace(str[0]);
 	if (mode == DEFAULT_MODE) {
-		func(str, LOOK_WORDS);
+		divide_str(str, LOOK_WORDS);
 		n_word = c_word_static;
 		new = malloc(sizeof(char *) * n_word + 1);
 		new[n_word - 1] = NULL;
@@ -69,7 +69,7 @@ char **buffer_split_words(const char *str, short *c_word)
 {
 	char **new = NULL;
 
-	new = func(str, DEFAULT_MODE);
+	new = divide_str(str, DEFAULT_MODE);
 	*c_word = c_word_static;
 	if (new == NULL) {
 		output_logs_str(PREFIX_WARNING, "ARRAY IS NULL\n");
