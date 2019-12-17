@@ -6,13 +6,12 @@
 #include <malloc.h>
 #include "../../../Headers/simple_gui.h"
 
-static short get_words(const char *str)
+static short get_words(const char **arr)
 {
 	short count = 0;
 
-	for (unsigned int i = 0; str[i]; i++) {
-		if (str[i] == ' ')
-			count++;
+	for (unsigned int i = 0; arr[i]; i++) {
+		count++;
 	}
 	return ++count;
 }
@@ -42,6 +41,7 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 		else {
 			new[i] = arr[count++];
 		}
+		cur->properties[i] = P_INIT;
 	}
 	cur->word_arr = new;
 	cur->c_word += words;
@@ -50,22 +50,13 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 
 void wb_write(instance *current, const char *str, int index)
 {
-	char *delim = " ";
-	char *tmp = strdup(str);
-	char *tok = NULL;
-	int i = 0;
-	short c_word = get_words(str);
-	char **arr = malloc(sizeof(char *) * c_word);
+	char **arr;
 
 	if (index < 0 || index > (current->win_count-1)) {
 		output_logs_str(PREFIX_ERROR, "Selected WINDOW does not exist.\n");
 		return;
 	}
-	for (tok = strtok(tmp, delim); tok != NULL;) {
-		arr[i++] = strdup(tok);
-		tok = strtok(NULL, delim);
-	}
-	free(tmp);
-	append_inst_buffer(current, arr, index, c_word);
+	arr = buffer_split_words(str, &current->buffer[index]->c_word);
+	append_inst_buffer(current, arr, index, current->buffer[index]->c_word);
 	buffer_flush(current, index);
 }
