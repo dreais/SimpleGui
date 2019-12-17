@@ -5,14 +5,6 @@
 #include <stdlib.h>
 #include "../../Headers/simple_gui.h"
 
-static void free_short_arr(char **arr, short size)
-{
-	for (short i = 0; i < size; i++) {
-		free(arr[i]);
-	}
-	free(arr);
-}
-
 static void free_buffer(t_buff *buff)
 {
 	for (short i = 0; i < buff->c_word; i++) {
