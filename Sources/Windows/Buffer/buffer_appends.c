@@ -15,9 +15,8 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 
 	if (cur->word_arr == NULL) {
 		cur->word_arr = arr;
-		cur->properties = malloc(sizeof(int *) * words);
+		cur->properties = malloc(sizeof(int) * words);
 		for (short i = 0; i < words; i++) {
-			cur->properties = malloc(sizeof(int) * words);
 			cur->properties[i] = P_INIT;
 		}
 		cur->c_word = words;
@@ -44,7 +43,7 @@ static void append_inst_buffer(instance *current, char **arr, int index, short w
 	free(arr);
 }
 
-void wb_write(instance *current, const char *str, int index)
+void wb_append(instance *current, const char *str, int index)
 {
 	char **arr;
 
