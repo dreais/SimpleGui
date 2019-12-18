@@ -6,7 +6,7 @@
 #include <malloc.h>
 #include <simple_gui.h>
 
-static void append_inst_buffer(instance *current, char **arr, int index, short words)
+void append_inst_buffer(instance *current, char **arr, int index, short words)
 {
 	char **new;
 	int *prop_new;

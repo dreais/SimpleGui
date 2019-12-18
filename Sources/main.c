@@ -55,6 +55,9 @@ int main(void)
 	//wb_append(&inst_tmp, str, 0);
 	char *str2 = "nop nah \n, idk je \nouepbreftest test test test il faut plus e fezo ecrire test";
 	wb_append(&inst_tmp, str2, 0);
+	wb_append(&inst_tmp, str2, 0);
+
+	wb_write(&inst_tmp, str2, 0);
 
 	int ch = '\0';
 	while (ch != 'q') {

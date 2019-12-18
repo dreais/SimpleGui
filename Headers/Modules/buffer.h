@@ -13,6 +13,7 @@
  */
 
 void wb_append(instance *current, const char *str, int index);
+void wb_write(instance *current, const char *str, int index);
 t_buff *create_empty_buffer(void);
 void buffer_flush(instance *current, int index);
 
