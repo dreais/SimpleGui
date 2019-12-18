@@ -37,7 +37,6 @@ void *mouse_events(void *n)
 			if (fds.revents & POLLIN) {
 				if (getmouse(&event) == OK) {
 					if (event.bstate & BUTTON1_PRESSED) {
-						output_logs_str(PREFIX_WARNING, "Clicked\n");
 						coord_found = (pt) {.x = event.x, .y = event.y};
 						w_set_active(coord_found);
 						continue;
