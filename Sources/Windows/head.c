@@ -2,7 +2,7 @@
 // Created by rudreais on 17/12/2019.
 //
 
-#include <simple_gui.h
+#include <simple_gui.h>
 #include <properties.h>
 
 static void p_borders(WINDOW *win, int index)
