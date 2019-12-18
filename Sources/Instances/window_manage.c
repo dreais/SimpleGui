@@ -2,8 +2,8 @@
 // Created by rudreais on 04/12/2019.
 //
 
-#include "properties.h"
-#include "window_manage.h"
+#include <properties.h>
+#include <window_manage.h>
 
 void resize_window(WINDOW *to_resize, prop_t prop)
 {

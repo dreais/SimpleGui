@@ -2,9 +2,7 @@
 // Created by rudreais on 17/12/2019.
 //
 
-#include <string.h>
-#include "../../../Headers/simple_gui.h"
-#include <properties.h>
+#include <simple_gui.h>
 
 void buffer_flush(instance *current, int index)
 {

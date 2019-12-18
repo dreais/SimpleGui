@@ -4,8 +4,8 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "../../../Headers/Modules/buffer.h"
-#include "../../../Headers/easylogs.h"
+#include <Modules/buffer.h>
+#include <easylogs.h>
 
 static short c_word_static = 0;
 

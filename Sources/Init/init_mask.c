@@ -2,8 +2,8 @@
 // Created by rudreais on 02/12/2019.
 //
 
-#include "../Headers/simple_gui.h"
-#include "../Headers/Modules/mouse.h"
+#include <simple_gui.h>
+#include <Modules/mouse.h>
 
 static MASK_ASSOC MASKS[] = {
 		{.func_int = &raw, .MASK = RAW, .NAME = "RAW", .func_type = FUNC_INT},

@@ -4,7 +4,7 @@
 
 #include <string.h>
 #include <malloc.h>
-#include "../../../Headers/simple_gui.h"
+#include <simple_gui.h>
 
 static void append_inst_buffer(instance *current, char **arr, int index, short words)
 {

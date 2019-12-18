@@ -4,11 +4,10 @@
 
 #include <poll.h>
 #include <unistd.h>
-#include <curses.h>
 #include <pthread.h>
-#include "../../../Headers/simple_gui.h"
-#include "../../../Headers/properties.h"
-#include "../../../Headers/Modules/mouse.h"
+#include <simple_gui.h>
+#include <properties.h>
+#include <Modules/mouse.h>
 
 static bool quit = false;
 
