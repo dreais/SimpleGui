@@ -23,7 +23,7 @@ void buffer_flush(instance *current, int index)
 	WINDOW *win = current->win[index];
 	t_buff *buf = current->buffer[index];
 	unsigned short newline = 1;
-	int y = 0, x, to_scroll = 0, line_scroll = 0;
+	int y = 0, x, line_scroll = 0;
 
 	(void) y; // the warning is just pissing me off
 	wmove(win, newline, 1);
@@ -33,7 +33,7 @@ void buffer_flush(instance *current, int index)
 			if (buf->word_arr[i][j] != '\n') {
 				getyx(win, y, x);
 				if (x == getmaxx(win) - 2) {
-					to_scroll++;
+					buf->scroll_size++;
 					line_scroll = newline;
 				} else
 					waddch(win, buf->word_arr[i][j]);

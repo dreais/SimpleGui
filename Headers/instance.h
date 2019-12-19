@@ -35,6 +35,7 @@ typedef struct {
 typedef struct {
 	char **word_arr;
 	int *properties;
+	short scroll_size;
 	short c_line;
 	short c_word;
 } t_buff;
