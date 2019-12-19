@@ -2,9 +2,9 @@
 // Created by rudreais on 09/12/2019.
 //
 
-#include "../Headers/simple_gui.h"
-#include "../Headers/window_manage.h"
-#include "../Headers/properties.h"
+#include <simple_gui.h>
+#include <window_manage.h>
+#include <properties.h>
 
 static unsigned short mode = SPLIT_MODE_DEFAULT;
 static unsigned short last_mode = SPLIT_MODE_DEFAULT;

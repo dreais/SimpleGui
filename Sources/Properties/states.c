@@ -3,8 +3,7 @@
 //
 
 #include <stdbool.h>
-#include "properties.h"
-#include "simple_gui.h"
+#include <properties.h>
 
 bool is_in_window(WINDOW *win, pt coord)
 {

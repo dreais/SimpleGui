@@ -11,6 +11,7 @@ t_buff *create_empty_buffer(void)
 
 	new->word_arr = NULL;
 	new->properties = NULL;
+	new->scroll_size = 0;
 	new->c_line = 0;
 	new->c_word = 0;
 	return new;

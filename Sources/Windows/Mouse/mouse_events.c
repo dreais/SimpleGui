@@ -4,11 +4,10 @@
 
 #include <poll.h>
 #include <unistd.h>
-#include <curses.h>
 #include <pthread.h>
-#include "../../../Headers/simple_gui.h"
-#include "../../../Headers/properties.h"
-#include "../../../Headers/Modules/mouse.h"
+#include <simple_gui.h>
+#include <properties.h>
+#include <Modules/mouse.h>
 
 static bool quit = false;
 
@@ -32,12 +31,11 @@ void *mouse_events(void *n)
 
 	(void) n;
 	while (quit == false) {
-		ret_value = poll(&fds, 1, 100);
+		ret_value = poll(&fds, 1, -1);
 		if (ret_value > 0) {
 			if (fds.revents & POLLIN) {
 				if (getmouse(&event) == OK) {
 					if (event.bstate & BUTTON1_PRESSED) {
-						output_logs_str(PREFIX_WARNING, "Clicked\n");
 						coord_found = (pt) {.x = event.x, .y = event.y};
 						w_set_active(coord_found);
 						continue;

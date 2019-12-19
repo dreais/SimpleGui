@@ -51,13 +51,19 @@ int main(void)
 	refresh();
 
 	char *str = "test1 test2 test3\n";
-	//wb_write(&inst_tmp, str, 0);
-	//wb_write(&inst_tmp, str, 0);
+	//wb_append(&inst_tmp, str, 0);
+	//wb_append(&inst_tmp, str, 0);
 	char *str2 = "nop nah \n, idk je \nouepbreftest test test test il faut plus e fezo ecrire test";
+	wb_append(&inst_tmp, str2, 0);
+	wb_append(&inst_tmp, str2, 0);
+
 	wb_write(&inst_tmp, str2, 0);
 
-	show_win(&inst_tmp);
-	getch();
+	int ch = '\0';
+	while (ch != 'q') {
+		show_win(&inst_tmp);
+		ch = getch();
+	}
 	destroy_win_arr(&inst_tmp);
 	cancel_poll();
 	endwin();

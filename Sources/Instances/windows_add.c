@@ -2,9 +2,9 @@
 // Created by rudreais on 09/12/2019.
 //
 
-#include "../Headers/simple_gui.h"
-#include "../Headers/properties.h"
-#include "../Headers/window_manage.h"
+#include <simple_gui.h>
+#include <properties.h>
+#include <window_manage.h>
 
 // begins at 1 since the very first one will not be created here (for now)
 // /+TODO for visibility

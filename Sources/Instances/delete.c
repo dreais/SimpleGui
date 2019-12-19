@@ -3,7 +3,7 @@
 //
 
 #include <stdlib.h>
-#include "../../Headers/simple_gui.h"
+#include <simple_gui.h>
 
 static void free_buffer(t_buff *buff)
 {

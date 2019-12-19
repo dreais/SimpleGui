@@ -2,8 +2,8 @@
 // Created by rudreais on 10/12/2019.
 //
 
-#include "../Headers/simple_gui.h"
-#include "../Headers/window_manage.h"
+#include <simple_gui.h>
+#include <window_manage.h>
 
 void win_pop(instance *current, int index)
 {

@@ -35,6 +35,7 @@ typedef struct {
 typedef struct {
 	char **word_arr;
 	int *properties;
+	short scroll_size;
 	short c_line;
 	short c_word;
 } t_buff;
@@ -52,6 +53,7 @@ typedef struct {
 void show_win(instance *current);
 
 void w_set_active(pt coord);
+short w_get_active(void);
 void set_instance(instance *current);
 
 #endif //SIMPLEGUI_INSTANCE_H

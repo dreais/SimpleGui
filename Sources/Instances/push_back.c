@@ -3,8 +3,7 @@
 //
 
 #include <stdlib.h>
-#include "../../Headers/simple_gui.h"
-#include "../../Headers/Modules/buffer.h"
+#include <simple_gui.h>
 
 void win_push_back(instance *current, WINDOW *to_push)
 {

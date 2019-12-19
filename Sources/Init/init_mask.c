@@ -2,8 +2,8 @@
 // Created by rudreais on 02/12/2019.
 //
 
-#include "../Headers/simple_gui.h"
-#include "../Headers/Modules/mouse.h"
+#include <simple_gui.h>
+#include <Modules/mouse.h>
 
 static MASK_ASSOC MASKS[] = {
 		{.func_int = &raw, .MASK = RAW, .NAME = "RAW", .func_type = FUNC_INT},
@@ -15,6 +15,15 @@ static MASK_ASSOC MASKS[] = {
 		{.func_int_int = &curs_set, .MASK = NOCURSOR, .NAME="NOCURSOR", .func_type = FUNC_INT_INT}
 };
 
+static void get_colors(void)
+{
+	init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
+	init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
+	init_pair(RED, COLOR_RED, COLOR_BLACK);
+	init_pair(RED_BG, COLOR_RED, COLOR_RED);
+}
+
 int create_terminal(unsigned int args)
 {
 	unsigned int mask = 0u | args;
@@ -22,6 +31,8 @@ int create_terminal(unsigned int args)
 
 	get_log_file();
 	initscr();
+	start_color();
+	get_colors();
 	for (unsigned int i = 0; i < size_masks; i++) {
 		if (mask & MASKS[i].MASK) {
 			output_logs_str(PREFIX_DEBUG, "Applying arg %s to the terminal.\n", MASKS[i].NAME);
