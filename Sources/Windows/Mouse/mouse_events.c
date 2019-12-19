@@ -31,7 +31,7 @@ void *mouse_events(void *n)
 
 	(void) n;
 	while (quit == false) {
-		ret_value = poll(&fds, 1, 100);
+		ret_value = poll(&fds, 1, -1);
 		if (ret_value > 0) {
 			if (fds.revents & POLLIN) {
 				if (getmouse(&event) == OK) {
