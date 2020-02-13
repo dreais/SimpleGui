@@ -20,6 +20,8 @@ void buffer_flush(instance *current, int index);
 short is_whitespace(const char c);
 char **buffer_split_words(const char *str, short *c_word);
 
+void buffer_scroll(instance *current);
+
 #define DEFAULT_MODE 0
 #define LOOK_WORDS 1
 

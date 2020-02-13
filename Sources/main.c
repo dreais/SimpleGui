@@ -62,7 +62,8 @@ int main(void)
 	int ch = '\0';
 	while (ch != 'q') {
 		show_win(&inst_tmp);
-		ch = getch();
+        buffer_scroll(&inst_tmp);
+        ch = getch();
 	}
 	destroy_win_arr(&inst_tmp);
 	cancel_poll();

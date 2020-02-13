@@ -41,11 +41,11 @@ void buffer_flush(instance *current, int index)
 				wmove(win, ++newline, 1);
 			}
 		}
-		output_logs_str(PREFIX_INFO, "To scroll: %d\n", buf->to_scroll);
 		apply_properties(win, buf->properties[i], P_MODE_UNAPPLY);
 	}
 	if (line_scroll != 0) {
 		wmove(win, line_scroll, getmaxx(win)-1);
 		waddch(win, '>');
 	}
+	output_logs_str(PREFIX_WARNING, "INDEX %d\tLeaving with %d scroll\n", index, buf->to_scroll);
 }
