@@ -11,7 +11,7 @@ include_directories(${CMAKE_SOURCE_DIR}/Headers)
 
 set(SOURCES Sources/main.c Sources/Init/create_entities.c Headers/create_entities.h Headers/window_manage.h Sources/Init/init_mask.c Sources/Instances/push_back.c Sources/Instances/delete.c Sources/Instances/window_manage.c Sources/Properties/states.c Headers/properties.h Sources/Windows/Dropdown/dropdown_manage.c Sources/Instances/window_split.c Sources/Instances/windows_add.c Sources/Instances/pop_window.c Headers/Modules/dropdown.h Sources/Windows/Buffer/buffer_appends.c Headers/Modules/buffer.h Sources/Windows/Mouse/mouse_events.c Headers/Modules/mouse.h Headers/instance.h Sources/Windows/Buffer/create.c Sources/Windows/Buffer/buffer_flush.c Sources/Windows/Buffer/buffer_misc.c Sources/Windows/head.c Sources/Windows/active_windows.c Sources/Windows/Buffer/buffer_write.c)
 
-set(C_FILES ${SOURCES})
+set(C_FILES ${SOURCES} Sources/Windows/Buffer/buffer_scroll.c)
 message(STATUS "Creating sources from: ${C_FILES}")
 add_executable(SimpleGui ${C_FILES})
 

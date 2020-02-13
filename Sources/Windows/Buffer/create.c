@@ -13,5 +13,6 @@ t_buff *create_empty_buffer(void)
 	new->properties = NULL;
 	new->c_line = 0;
 	new->c_word = 0;
+	new->to_scroll = 0;
 	return new;
 }

@@ -37,6 +37,7 @@ typedef struct {
 	int *properties;
 	short c_line;
 	short c_word;
+	int to_scroll;
 } t_buff;
 
 typedef struct {
