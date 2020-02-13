@@ -25,6 +25,7 @@ void buffer_flush(instance *current, int index)
 	unsigned short newline = 1;
 	int y = 0, x, line_scroll = 0;
 
+	buf->to_scroll = 0;
 	(void) y; // the warning is just pissing me off (and i might use it again)
 	wmove(win, newline, 1);
 	for (short i = 0; i < buf->c_word; i++) {
